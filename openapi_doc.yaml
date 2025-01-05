@@ -12,7 +12,7 @@ info:
     url: 'https://via.placeholder.com/190x90.png?text=Educastream'
 servers:
   -
-    url: 'https://api2.7speaking.educastream.com/front'
+    url: 'https://dummy.com'
 paths:
   /common/golden-rule:
     get:
