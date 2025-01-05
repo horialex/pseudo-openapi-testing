@@ -1,0 +1,272 @@
+openapi: 3.0.0
+info:
+  title: 'Educastream api'
+  description: 'List of available endpoints'
+  contact:
+    email: contact@educastream.com
+  license:
+    name: 'Apache 2.0'
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+  x-logo:
+    url: 'https://via.placeholder.com/190x90.png?text=Educastream'
+servers:
+  -
+    url: 'https://api2.7speaking.educastream.com/front'
+paths:
+  /common/golden-rule:
+    get:
+      tags:
+        - NotValidated
+        - common
+      summary: 'Get list of golden rules'
+      operationId: getGoldenRule
+      parameters:
+        -
+          name: source
+          in: query
+          description: 'source type. I.e: mobile, web'
+          required: true
+          schema:
+            type: string
+            enum:
+              - web
+              - mobile
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: '200'
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+                  payload:
+                    required:
+                      - blocs
+                      - seemore
+                      - subtitle
+                    properties:
+                      blocs:
+                        type: array
+                        items:
+                          oneOf:
+                            -
+                              $ref: '#/components/schemas/GoldenRuleBlockWeb'
+                            -
+                              $ref: '#/components/schemas/GoldenRuleBlockMobile'
+                      seemore:
+                        description: 'see more contents of the golden rule'
+                        type: string
+                      subtitle:
+                        description: 'display the subtitle'
+                        type: string
+                    type: object
+                type: object
+  /vocabulary/update:
+    post:
+      tags:
+        - NotValidated
+        - my-vocabulary
+      summary: 'update an item already added to user vocabulary list'
+      description: ''
+      operationId: onUpdateVocabulary
+      requestBody:
+        content:
+          multipart/x-www-form-urlencoded:
+            schema:
+              properties:
+                word:
+                  description: 'the word or text to set'
+                  type: string
+                  example: car
+                reminder:
+                  description: 'the reminder'
+                  type: string
+                  example: something
+                example:
+                  description: 'contextual example'
+                  type: string
+                  example: vehicule
+                id:
+                  description: 'pk you want want to update'
+                  type: number
+                  example: 5736681
+              type: object
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                  - payload
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: '200'
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+                  payload:
+                    properties:
+                      data:
+                        type: object
+                        items:
+                          $ref: '#/components/schemas/MyvocabularyItem'
+                    type: object
+                type: object
+components:
+  schemas:
+    GoldenRuleBlockWeb:
+      description: 'properties to describe a golden rule block for web'
+      required:
+        - bloc
+        - color
+        - title
+        - description
+        - more
+        - image
+      properties:
+        bloc:
+          description: 'the block main title'
+          type: string
+          example: "Règle d'Or N°1"
+        color:
+          description: color
+          type: string
+          example: '#06BCE5'
+        title:
+          description: 'block title'
+          type: string
+          example: 'a title'
+        description:
+          description: 'block description'
+          type: string
+          example: 'Préférez de courtes sessions quotidiennes de 15 minutes ...'
+        more:
+          description: 'hidden part of the block content'
+          type: string
+          example: 'En savoir plus'
+        image:
+          description: ''
+          type: string
+          example: '{domain}/assets/pics/goldenrules/regularite.svg'
+      type: object
+    GoldenRuleBlockMobile:
+      description: 'properties to describe a golden rule block for mobile'
+      required:
+        - icone
+        - bloc
+        - colorStart
+        - colorEnd
+        - title
+        - description
+        - more
+        - image
+      properties:
+        icone:
+          description: 'the icon name'
+          type: string
+          example: light
+        bloc:
+          description: 'the block main title'
+          type: string
+          example: "Règle d'Or N°1"
+        colorStart:
+          description: 'color gradient start as hex'
+          type: string
+          example: '0x39b3d4'
+        colorEnd:
+          description: 'color gradient end as hex'
+          type: string
+          example: '0x11a0c8'
+        title:
+          description: 'block title'
+          type: string
+          example: 'a title'
+        description:
+          description: 'block description'
+          type: string
+          example: 'Préférez de courtes sessions quotidiennes de 15 minutes ...'
+        more:
+          description: 'hidden part of the block content'
+          type: string
+          example: 'En savoir plus'
+        image:
+          description: ''
+          type: string
+          example: '{domain}/assets/pics/goldenrules/regularite.svg'
+      type: object  
+    MyvocabularyItem:
+      required:
+        - id
+        - word
+        - reminder
+        - example
+        - source_id
+        - source_type
+      properties:
+        id:
+          description: 'item primary key'
+          type: integer
+          example: '218'
+        word:
+          description: 'word added'
+          type: string
+          example: 'transportation index'
+        reminder:
+          description: 'definition or explanation'
+          type: string
+          example: ''
+        example:
+          description: "word use in a sentence"
+          type: string
+          example: 'sample use of the word'
+        source_id:
+          description: 'if the word comes from an item on the app, primary key'
+          type: integer
+          example: '11603'
+        source_type:
+          description: 'where does this item comes from. Can be any of {user, fiche business, vocabulary workshop, news} '
+          type: string
+          example: news
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+security:
+  -
+    bearerAuth: []
+tags:
+  -
+    name: common
+    description: ''
+  -
+    name: my-vocabulary
+    description: '<b>[All language taught]</b> Your selection of words and expressions to remember!'
+  -
+    name: NotValidated
+    description: "Means this endpoint is still in 'work in progress' state.<br/>Either it is being implemented, or the documentation is to be done, or the unit tests are to be done or the PR must be validated"

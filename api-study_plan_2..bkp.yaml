@@ -1,0 +1,1549 @@
+openapi: 3.0.0
+info:
+  title: 'StudyPlan'
+  description: 'List of available endpoints'
+  contact:
+    email: contact@educastream.com
+  license:
+    name: 'Apache 2.0'
+    url: 'https://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+  x-logo:
+    url: 'https://via.placeholder.com/190x90.png?text=Educastream'
+servers:
+  -
+    url: 'https://api2.7speaking.educastream.com/front'
+paths:
+  /study-plan/programs:
+    get:
+      tags:
+        - front-study-plan
+      summary: 'Get the programs for the current user'
+      operationId: getPrograms
+      description: 'retrieve the list of programs available for a user (i.e : active and between start and end date)'
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: 200
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+                  payload:
+                    required:
+                      - programs
+                    properties:
+                      programs:
+                        type: array
+                        items:
+                            $ref: '#/components/schemas/StudyPlanProgramFront'
+                    type: object
+                type: object
+
+  /mila/company/{company}/companies-packages:
+    get:
+      tags:
+        - mila
+      summary: 'Get all the companies (the company itself and there daughter companies) and there packages information for a given company'
+      operationId: getMilaCompaniesPackages
+      description: 'retrieve the list of companies and their packages'
+      parameters:
+        - name: company
+          in: path
+          description: 'a company id'
+          required: true
+          example: 1
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: 200
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+                  payload:
+                    required:
+                      - companies
+                    properties:
+                      companies:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/MilaCompaniesPackages'
+                    type: object
+                type: object
+
+
+  /mila/study-plan/company/{company}/program:
+    get:
+      tags:
+        - mila-study-plan
+      summary: 'Get all the programs for a given company'
+      operationId: getMilaCompanyPrograms
+      description: 'retrieve the list of programs available for a given company'
+      parameters:
+        - name: company
+          in: path
+          description: 'a company id'
+          required: true
+          example: 1
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: 200
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+                  payload:
+                    required:
+                      - programs
+                    properties:
+                      programs:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/StudyPlanProgram'
+                    type: object
+                type: object
+    post:
+      tags:
+        - mila-study-plan
+      summary: 'Create a program for a given company'
+      operationId: createMilaProgram
+      description: 'create a program for a given company'
+      parameters:
+        - name: company
+          in: path
+          description: 'a company id'
+          required: true
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudyPlanProgramObject'
+        required: true
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: 200
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+                  payload:
+                    required:
+                      - program
+                    properties:
+                      program:
+                        $ref: '#/components/schemas/StudyPlanProgramExistingObject'
+                    type: object
+
+  /mila/study-plan/company/{company}/program/{program}:
+    get:
+      tags:
+        - mila-study-plan
+      summary: 'Get a program for a given company'
+      operationId: getMilaProgram
+      description: 'retrieve a program for a given company'
+      parameters:
+        - name: company
+          in: path
+          description: 'a company id'
+          required: true
+          example: 1
+        - name: program
+          in: path
+          description: 'a program id'
+          required: true
+          example: 1
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: 200
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+                  payload:
+                    required:
+                      - program
+                    properties:
+                      program:
+                        $ref: '#/components/schemas/MilaStudyPlanProgram'
+                    type: object
+                type: object
+    put:
+      tags:
+        - mila-study-plan
+      summary: 'Update a program for a given company'
+      operationId: createMilaProgram
+      description: 'Update a program for a given company'
+      parameters:
+        - name: company
+          in: path
+          description: 'a company id'
+          required: true
+          example: 1
+        - name: program
+          in: path
+          description: 'a program id'
+          required: true
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudyPlanProgramExistingObject'
+        required: true
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: 200
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+                  payload:
+                    required:
+                      - program
+                    properties:
+                      program:
+                        $ref: '#/components/schemas/StudyPlanProgramObject'
+                    type: object
+    delete:
+      tags:
+        - mila-study-plan
+      summary: 'delete a program for a given company'
+      operationId: deleteMilaProgram
+      description: 'soft delete a program and linked entities units and unitsActivities for a given company'
+      parameters:
+        - name: company
+          in: path
+          description: 'a company id'
+          required: true
+          example: 1
+        - name: program
+          in: path
+          description: 'a program id'
+          required: true
+          example: 1
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: 200
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+
+  /mila/study-plan/company/{company}/program/{program}/unit:
+    post:
+      tags:
+        - mila-study-plan
+      summary: 'Create a unit for a program and a given company'
+      operationId: createOrUpdateMilaProgramUnit
+      description: 'create a unit '
+      parameters:
+        - name: company
+          in: path
+          description: 'a company id'
+          required: true
+          example: 1
+        - name: program
+          in: path
+          description: 'a program id'
+          required: true
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudyPlanUnitObject'
+        required: true
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: 200
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+                  payload:
+                    required:
+                      - unit
+                    properties:
+                      unit:
+                        $ref: '#/components/schemas/StudyPlanUnitExistingObject'
+                    type: object
+
+  /mila/study-plan/company/{company}/program/{program}/unit/{unit}:
+    put:
+      tags:
+        - mila-study-plan
+      summary: 'update a unit for a program and a given company'
+      operationId: createOrUpdateMilaProgramUnit
+      description: 'update a unit '
+      parameters:
+        - name: company
+          in: path
+          description: 'a company id'
+          required: true
+          example: 1
+        - name: program
+          in: path
+          description: 'a program id'
+          required: true
+          example: 1
+        - name: unit
+          in: path
+          description: 'a unit id'
+          required: true
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudyPlanUnitExistingObject'
+        required: true
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: 200
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+                  payload:
+                    required:
+                      - unit
+                    properties:
+                      unit:
+                        $ref: '#/components/schemas/StudyPlanUnitExistingObject'
+                    type: object
+    delete:
+      tags:
+        - mila-study-plan
+      summary: 'delete a unit for a given program and company'
+      operationId: deleteMilaUnit
+      description: 'soft delete a unit and linked entities unitsActivities for a given company'
+      parameters:
+        - name: company
+          in: path
+          description: 'a company id'
+          required: true
+          example: 1
+        - name: program
+          in: path
+          description: 'a program id'
+          required: true
+          example: 1
+        - name: unit
+          in: path
+          description: 'a unit id'
+          required: true
+          example: 1
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: 200
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+
+  /mila/study-plan/company/{company}/program/{program}/unit/{unit}/activity:
+    post:
+      tags:
+        - mila-study-plan
+      summary: 'Create an activity for a unit in a program and a given company'
+      operationId: createOrUpdateMilaProgramUnitActivity
+      description: 'create an activity'
+      parameters:
+        - name: company
+          in: path
+          description: 'a company id'
+          required: true
+          example: 1
+        - name: program
+          in: path
+          description: 'a program id'
+          required: true
+          example: 1
+        - name: unit
+          in: path
+          description: 'a unit id'
+          required: true
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudyPlanActivityObject'
+        required: true
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: 200
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+                  payload:
+                    required:
+                      - unit
+                    properties:
+                      unit:
+                        $ref: '#/components/schemas/StudyPlanUnitDetailed'
+                    type: object
+
+  /mila/study-plan/company/{company}/program/{program}/unit/{unit}/activity/{activity}:
+    delete:
+      tags:
+        - mila-study-plan
+      summary: 'delete an activity in a unit for a given program and company'
+      operationId: deleteMilaActivity
+      description: 'soft delete an activity in a unit'
+      parameters:
+        - name: company
+          in: path
+          description: 'a company id'
+          required: true
+          example: 1
+        - name: program
+          in: path
+          description: 'a program id'
+          required: true
+          example: 1
+        - name: unit
+          in: path
+          description: 'a unit id'
+          required: true
+          example: 1
+        - name: activity
+          in: path
+          description: 'an activity id'
+          required: true
+          example: 1
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: 200
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+                  payload:
+                    required:
+                      - unit
+                    properties:
+                      unit:
+                        $ref: '#/components/schemas/StudyPlanUnitDetailed'
+                    type: object
+
+  /mila/study-plan/company/{company}/program/{program}/users:
+    get:
+      tags:
+        - mila-study-plan
+      summary: 'retrieve all the users attached to a program'
+      operationId: programUsers
+      description: 'retrieve the list of all users attached to a program'
+      parameters:
+        - name: company
+          in: path
+          description: 'a company id'
+          required: true
+          example: 1
+        - name: program
+          in: path
+          description: 'a program id'
+          required: true
+          example: 1
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: 200
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+                  payload:
+                    required:
+                      - users
+                    properties:
+                      users:
+                        $ref: '#/components/schemas/StudyPlanProgramUsers'
+                    type: object
+    post:
+      tags:
+        - mila-study-plan
+      summary: 'Set all the users attached to a program'
+      operationId: linkUsersToProgram
+      description: 'Attache all provided users to a program.<br/>If other users was already attached to this program they are unlinked'
+      parameters:
+        - name: company
+          in: path
+          description: 'a company id'
+          required: true
+          example: 1
+        - name: program
+          in: path
+          description: 'a program id'
+          required: true
+          example: 1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudyPlanProgramUsers'
+        required: true
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: 200
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+                  payload:
+                    required:
+                      - users
+                    properties:
+                      users:
+                        $ref: '#/components/schemas/StudyPlanProgramUsers'
+                    type: object
+
+  /mila/study-plan/company/{company}/program/{program}/statistics:
+    get:
+      tags:
+        - mila-study-plan
+      summary: 'statistics for a program'
+      operationId: programUsers
+      description: 'retrieve all the users statistics for a program'
+      parameters:
+        - name: company
+          in: path
+          description: 'a company id'
+          required: true
+          example: 1
+        - name: program
+          in: path
+          description: 'a program id'
+          required: true
+          example: 1
+      responses:
+        200:
+          description: ok
+          content:
+            application/json:
+              schema:
+                required:
+                  - status
+                  - code
+                  - message
+                properties:
+                  status:
+                    type: string
+                    example: success
+                  code:
+                    description: 'http status code'
+                    type: number
+                    example: 200
+                  message:
+                    description: 'contain error message if code != 200'
+                    type: string
+                    example: ''
+                  payload:
+                    required:
+                      - program
+                    properties:
+                      program:
+                        $ref: '#/components/schemas/StudyPlanProgramStatistics'
+                    type: object
+
+components:
+  schemas:
+    StudyPlanProgramFront:
+      description: 'Properties to display a program on the frontend'
+      required:
+        - title
+        - completion
+        - units
+      properties:
+        title:
+          description: 'title'
+          type: string
+          example: "Program X"
+        completion:
+          description: 'percentage of completion'
+          type: integer
+          example: 14
+        units:
+          description: 'array of unit items'
+          type: array
+          items:
+            - $ref: '#/components/schemas/StudyPlanUnitFront'
+          example:
+            - title: "unitname1"
+              completed: false
+              activities:
+                - title: "French Startup Recycles European Solar"
+                  type: "NEWS"
+                  image: "https://via.placeholder.com/190x90.png?text=NEWS"
+                  completed: true
+                  displayOrder: 1
+                  link: "/document/13594?type=news"
+                  properties:
+                    difficultyLevel: 2
+                    mediaKind: "VIDEO"
+                    studyDuration: 20
+                    likesCount: 10
+                    liked: false
+                    commentsCount: 5
+                    commented: true
+
+                - title: "Grammar rule 'Be+ing'"
+                  type: "GRAMMAR_DETAILED"
+                  image: "https://via.placeholder.com/190x90.png?text=GRAMMAR_DETAILED"
+                  completed: false
+                  displayOrder: 2
+                  link: "/workshop/linguistic-content/grammar/detail-sheet/4"
+                  properties:
+                    difficultyLevel: 2
+                    studyDuration: 30
+      type: object
+
+    StudyPlanUnitFront:
+      description: 'Properties to display a unit on the frontend'
+      required:
+        - title
+        - completed
+        - activities
+      properties:
+        title:
+          description: 'unit name'
+          type: string
+          example: "unitname1"
+        completed:
+          description: 'whether the unit is completed or not'
+          type: boolean
+          example: false
+        activities:
+          description: 'array of activities linked to the unit'
+          type: array
+          items:
+            - $ref: '#/components/schemas/StudyPlanUnitActivitiesFront'
+      type: object
+
+    StudyPlanUnitActivitiesFront:
+      description: 'Properties to display an activity on the frontend'
+      required:
+        - title
+        - type
+        - image
+        - completed
+        - displayOrder
+        - link
+      properties:
+        title:
+          description: 'activity title'
+          type: string
+          example: 'French Startup Recycles European Solar'
+        type:
+          description: 'activity type'
+          type: string
+          example: "NEWS"
+        image:
+          description: 'url of the image'
+          type: string
+          example: "https://via.placeholder.com/190x90.png?text=Educastream"
+        completed:
+          description: 'whether the activity is completed or not'
+          type: boolean
+          example: false
+        displayOrder:
+          description: 'activity display order'
+          type: integer
+          example: 1
+        properties:
+          $ref: '#/components/schemas/ActivityProperties'
+        link:
+          description: 'link to the activity'
+          type: string
+          example: "/document/2120?type=news"
+      type: object
+
+    ActivityProperties:
+      description: 'Properties to display an activity on the frontend'
+      properties:
+        difficultyLevel:
+          description: 'difficulty level of the activity 1 to 6'
+          type: integer
+          example: 2
+        mediaKind:
+          description: 'kind of media'
+          type: string
+          example: "VIDEO"
+        studyDuration:
+          description: 'study duration in minutes'
+          type: integer
+          example: 30
+        likesCount:
+          description: "number of likes"
+          type: integer
+          example: 10
+        liked:
+          description: "user has liked the activity"
+          type: boolean
+          example: true
+        commentsCount:
+          description: "number of comments"
+          type: integer
+          example: 5
+        commented:
+          description: "user has commented the activity"
+          type: boolean
+          example: true
+      type: object
+
+    MilaStudyPlanProgram:
+      description: 'Properties to display a program on mila'
+      required:
+        - id
+        - packageId
+        - package
+        - company
+        - language
+        - title
+        - startingDate
+        - active
+        - units
+        - users
+      properties:
+        id:
+          description: 'program PK id'
+          type: integer
+          example: 1
+        packageId:
+          description: 'package id AKA offerId?'
+          type: integer
+          example: 1
+        package:
+          description: 'fully qualified package name'
+          type: string
+          example: "Offer n1 - Graduated"
+        company:
+          description: 'company name'
+          type: string
+          example: "UPSA SAS PAR RAINBOW"
+        language:
+          description: 'language'
+          type: string
+          example: 'EN_ALL'
+        title:
+          description: 'title'
+          type: string
+          example: "Program X"
+        startingDate:
+          description: 'program starting date as a timestamp'
+          type: number
+          example: 1731044547
+        active:
+          description: 'whether the program is active or not'
+          type: boolean
+          example: true
+        users:
+          description: 'statistics on the users linked to this program'
+          type: object
+          properties:
+            active:
+              description: 'number of active users'
+              type: integer
+              example: 10
+            total:
+              description: 'total number of users'
+              type: integer
+              example: 20
+        units:
+          description: 'array of unit items'
+          type: array
+          items:
+            - $ref: '#/components/schemas/StudyPlanUnitDetailed'
+          example:
+            - id: 1
+              title: "My first unit"
+              endingDate: 1731044547
+              activities:
+                - id: 1
+                  title: "My first activity"
+                  type: "NEWS"
+                  route: "/document/2120?type=news"
+                  displayOrder: 1
+
+            - id: 11
+              title: "My second super unit"
+              endingDate: 1741044547
+              activities:
+                - id: 3
+                  title: "Grammar rule something"
+                  type: "GRAMMAR_RULE"
+                  route: "/a/link/to/something"
+                  displayOrder: 1
+                - id: 4
+                  title: "Pronunciation workshop"
+                  type: "PRONUNCIATION"
+                  route: "/a/link/to/pronunciation"
+                  displayOrder: 2
+      type: object
+
+    StudyPlanProgram:
+      description: 'Properties to display a program on mila'
+      required:
+        - id
+        - packageId
+        - package
+        - company
+        - language
+        - title
+        - startingDate
+        - active
+        - units
+        - users
+      properties:
+        id:
+          description: 'program PK id'
+          type: integer
+          example: 1
+        packageId:
+          description: 'package id AKA offerId?'
+          type: integer
+          example: 1
+        package:
+          description: 'fully qualified package name'
+          type: string
+          example: "Offer n1 - Graduated"
+        company:
+          description: 'company name'
+          type: string
+          example: "UPSA SAS PAR RAINBOW"
+        language:
+          description: 'language'
+          type: string
+          example: 'EN_ALL'
+        title:
+          description: 'title'
+          type: string
+          example: "Program X"
+        startingDate:
+          description: 'program starting date as a timestamp'
+          type: number
+          example: 1731044547
+        active:
+          description: 'whether the program is active or not'
+          type: boolean
+          example: true
+        users:
+          description: 'statistics on the users linked to this program'
+          type: object
+          properties:
+            active:
+              description: 'number of active users'
+              type: integer
+              example: 10
+            total:
+              description: 'total number of users'
+              type: integer
+              example: 20
+        units:
+          description: 'array of unit items'
+          type: array
+          items:
+            - $ref: '#/components/schemas/StudyPlanUnitSummary'
+          example:
+            - id : 1
+              title : "My first unit"
+              activityCount: 3
+              endingDate: 1731044547
+            - id: 1
+              title: "My second super unit"
+              activityCount: 666
+              endingDate: 1731045547
+
+      type: object
+
+    StudyPlanUnitSummary:
+      description: 'Properties to display a summary of a unit on mila'
+      required:
+        - id
+        - title
+        - activityCount
+        - endingDate
+      properties:
+        id:
+          description: 'unit PK id'
+          type: integer
+          example: 1
+        title:
+          description: 'unit name'
+          type: string
+          example: "unitname1"
+        activityCount:
+          description: 'number of activities'
+          type: boolean
+          example: false
+        endingDate:
+          description: 'unit ending date as a timestamp'
+          type: number
+          example: 1731044547
+      type: object
+
+    StudyPlanProgramExistingObject:
+      description: 'Database program object with pk'
+      allOf:
+        - $ref: '#/components/schemas/StudyPlanProgramObject'
+        - type: object
+          properties:
+            id:
+              description: 'program PK id'
+              type: integer
+              example: 1
+
+    StudyPlanProgramObject:
+      description: 'Database program object'
+      required:
+        - companyId
+        - packageId
+        - language
+        - title
+        - active
+        - startingDate
+      properties:
+        companyId:
+          description: 'company PK id'
+          type: integer
+          example: 1
+        packageId:
+          description: 'package id AKA offerId?'
+          type: integer
+          example: 1
+        language:
+          description: 'language'
+          type: string
+          example: 'EN_ALL'
+        title:
+          description: 'title'
+          type: string
+          example: "Program X"
+        active:
+          description: 'whether the program is active or not'
+          type: boolean
+          example: true
+        startingDate:
+          description: 'program starting date as a timestamp'
+          type: number
+          example: 1731044547
+        endingDate:
+          description: 'program ending date as a timestamp'
+          type: number
+          required: false
+          example: 1731044547
+      type: object
+
+    StudyPlanUnitDetailed:
+      description: 'Properties to display a detailed unit on mila'
+      required:
+        - id
+        - title
+        - endingDate
+        - activities
+      properties:
+        id:
+          description: 'unit PK id'
+          type: integer
+          example: 1
+        title:
+          description: 'unit name'
+          type: string
+          example: "unitname1"
+        endingDate:
+          description: 'unit ending date as a timestamp'
+          type: number
+          example: 1731044547
+        activities:
+          description: 'array of detailed activity items'
+          type: array
+          items:
+            - $ref: '#/components/schemas/StudyPlanActivityExistingObject'
+          example:
+            - id: 23
+              unitId: 1
+              type: "NEWS"
+              title: "7 essential rules for learning a language in 6 months"
+              displayOrder: 1
+              routeKeyValue: "{'key1':'value1','key2':'value2'}"
+              route: "/document/13594?type=news"
+            - id: 24
+              unitId: 1
+              type: "GRAMMAR_RULE"
+              title: "BE+Ing"
+              displayOrder: 2
+              routeKeyValue: "{'key1':'toto','key2':'titi','key3':'tata'}"
+              route: "/grammar/something/key2"
+      type: object
+
+    StudyPlanProgramUnitActivity:
+      description: 'Properties for an activity on a program unit'
+      required:
+        - id
+        - type
+        - title
+        - displayOrder
+        - route
+      properties:
+        id:
+          description: 'activity PK id'
+          type: integer
+          example: 1
+        type:
+          description: 'activity type'
+          type: string
+          example: "GRAMMAR, VOCABULARY, NEWS, ..."
+        title:
+          description: 'activity title'
+          type: string
+          example: "7 essential rules for learning a language in 6 months"
+        displayOrder:
+          description: 'order of the activity in the unit'
+          type: integer
+          example: 2
+        route:
+          description: 'activity route'
+          type: string
+          example: "/document/13594?type=news"
+      type: object
+
+    MilaCompaniesPackages:
+      description: 'Properties to retrieve the list of companies and there packages'
+      required:
+        - id
+        - name
+        - packages
+      properties:
+        id:
+          description: 'company PK id'
+          type: integer
+          example: 1
+        name:
+          description: 'company name'
+          type: string
+          example: "UPSA SAS PAR RAINBOW"
+        packages:
+          description: 'array of package items'
+          type: array
+          items:
+            - $ref: '#/components/schemas/MilaCompanyPackage'
+          example:
+            - id: 1
+              name: "Package 1"
+              languages:
+                - name: "EN_ALL"
+                - name: "FR_ALL"
+                - name: "ES_ALL"
+            - id: 2
+              name: "Package 2"
+              languages:
+                - name: "IT_ALL"
+                - name: "ES_ALL"
+      type: object
+
+    MilaCompanyPackage:
+      description: 'package properties'
+      required:
+        - id
+        - name
+        - languages
+      properties:
+        id:
+          description: 'package PK id'
+          type: integer
+          example: 1
+        name:
+          description: 'package name'
+          type: string
+          example: "Package n1 - Graduated"
+        languages:
+          description: 'array of language items'
+          type: array
+          items:
+            - $ref: '#/components/schemas/MilaLanguage'
+          example:
+            - name: "EN_ALL"
+            - name: "DE_ALL"
+      type: object
+
+    MilaLanguage:
+      description: 'language properties'
+      required:
+        - name
+      properties:
+        name:
+          description: 'language name'
+          type: string
+          example: "EN_ALL"
+      type: object
+
+    StudyPlanUnitExistingObject:
+      description: 'Database unit object with pk'
+      allOf:
+        - type: object
+          properties:
+            id:
+              description: 'unit PK id'
+              type: integer
+              example: 1
+        - $ref: '#/components/schemas/StudyPlanUnitObject'
+
+    StudyPlanUnitObject:
+      description: 'Database unit object'
+      required:
+        - programId
+        - title
+        - active
+        - endingDate
+        - displayOrder
+      properties:
+        programId:
+          description: 'program PK id'
+          type: integer
+          example: 1
+        title:
+          description: 'unit name'
+          type: string
+          example: "unitname1"
+        active:
+          description: 'whether the unit is active or not'
+          type: boolean
+          example: true
+        endingDate:
+          description: 'unit ending date as a timestamp'
+          type: number
+          example: 1731044547
+        displayOrder:
+          description: 'order of the unit in the program'
+          type: integer
+          example: 2
+      type: object
+
+    StudyPlanActivityExistingObject:
+      description: 'Database activity object with pk'
+      allOf:
+        - type: object
+          properties:
+            id:
+              description: 'activity PK id'
+              type: integer
+              example: 1
+        - $ref: '#/components/schemas/StudyPlanActivityObject'
+
+    StudyPlanActivityObject:
+      description: 'Database activity object'
+      required:
+        - unitId
+        - type
+        - title
+        - displayOrder
+        - routeKeyValue
+        - route
+      properties:
+        unitId:
+          description: 'unit PK id'
+          type: integer
+          example: 1
+        type:
+          description: 'activity type'
+          type: string
+          example: "GRAMMAR, VOCABULARY, NEWS, ..."
+        title:
+          description: 'activity title'
+          type: string
+          example: "7 essential rules for learning a language in 6 months"
+        displayOrder:
+          description: 'order of the activity in the unit'
+          type: integer
+          example: 2
+        routeKeyValue:
+          description: 'json string containing all the key/values of the route'
+          type: string
+          example: "{'key1':'value1','key2':'value2'}"
+        route:
+          description: 'url of the activity based on the current frontend'
+          type: string
+          example: "/document/13594?type=news"
+
+    StudyPlanProgramUsers:
+      description: 'List of users assigned to a program'
+      required:
+        - users
+      properties:
+        users:
+          type: array
+          items:
+            - $ref: '#/components/schemas/StudyPlanProgramUser'
+          example:
+            - id: 23456
+              firstname: "philippe"
+              lastname: "taberlet"
+              email: "a@a.fr"
+            - id: 23457
+              firstname: "bob"
+              lastname: "marley"
+              email: "b@b.fr"
+            - id: 121212
+              firstname: "eric"
+              lastname: "dupond"
+              email: "c@c.fr"
+            - id: 121666
+              firstname: "jean"
+              lastname: "dupont"
+              email: "d@d.fr"
+
+    StudyPlanProgramUser:
+      description: "describe a user assigned to a program"
+      required:
+        - id
+        - firstname
+        - lastname
+        - email
+      properties:
+        id:
+          description: "t_abonne PK id"
+          type: number
+          example: 17654
+        firstname:
+          description: "firstname"
+          type: string
+          example: "john"
+        lastname:
+          description: "lastname"
+          type: string
+          example: "doe"
+        email:
+          description: "email"
+          type: string
+          example: "john_doe@anonymous.com"
+
+    StudyPlanProgramStatistics:
+      required:
+        - title
+        - assignedCount
+        - activeCount
+        - activitiesPerUser
+        - bonnesReponsesButInEnglish
+        - users
+      properties:
+        title:
+          description: "title of the program"
+          type: string
+          example: "Program 1"
+        assignedCount:
+          description: "number of users on this program"
+          type: number
+          example: 225
+        activeCount:
+          description: "AFAIK : number of users assigned to this program that have at least completed 1 activity expressed in percent"
+          type: number
+          example: 30
+        activitiesPerUser:
+          description: "AFAIK : average number of activities already completed by users expressed in percent"
+          type: number
+          example: 25
+        bonnesReponsesButInEnglish:
+          description: "AFAIK; average number of correct answers expressed in percent"
+          type: number
+          example: 4
+        users:
+          description: "list of users assigned to this program and there actual statistics"
+          type: array
+          items:
+            - $ref: '#/components/schemas/StudyPlanProgramUserWithStatistic'
+          example:
+            - firstname: "john"
+              lastname: "doe"
+              group: "the wailers"
+              package: "Reggae"
+              status: "deceased"
+              activitiesDoneCount: 12345
+              completionRate: 100
+              completionDate: 1731076409
+              activitiesDoneOnTime: 12345
+            - firstname: "pierre"
+              lastname: "dupond"
+              group: "the who"
+              package: "Rock"
+              status: "unknown"
+              activitiesDoneCount: 3
+              completionRate: 5
+              completionDate: null
+              activitiesDoneOnTime: 1
+
+    StudyPlanProgramUserWithStatistic:
+      required:
+        - firstname
+        - lastname
+        - group
+        - package
+        - status
+        - activitiesDoneCount
+        - completionRate
+        - completionDate
+        - activitiesDoneOnTime
+      properties:
+        firstname:
+          description: "firstname"
+          type: string
+          example: "john"
+        lastname:
+          description: "lastname"
+          type: string
+          example: "doe"
+        group:
+          description: "group name"
+          type: string
+          example: "Classe 1"
+        package:
+          description: "package name"
+          type: string
+          example: "Graduated"
+        status:
+          description: "NEED TO BE DEFINED , an enum ? all possible values?"
+          type: string
+          example: "started"
+        activitiesDoneCount:
+          description: "AFAIK: number of activities already done"
+          type: number
+          example: 10
+        completionRate:
+          description: "AFAIK: ratio between the number of activities done and total activities"
+          type: number
+          example: 10
+        completionDate:
+          description: "AFAIK: when the program has been totaly completed"
+          type: number
+          example: 10
+        activitiesDoneOnTime:
+          description: "AFAIK: number of activities completed within the time frame of the unit"
+          type: number
+          example: 10
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+security:
+  -
+    bearerAuth: []
+tags:
+  -
+    name: front-study-plan
+    description: 'endpoints related to study plan used by the frontend'
+
+  - name: mila-study-plan
+    description: 'endpoints related to study plan used by mila frontend'
+
+  - name: mila
+    description: 'endpoints used by mila frontend'
+
