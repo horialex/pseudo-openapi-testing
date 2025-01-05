@@ -10,7 +10,7 @@ const ajv = new Ajv({ strict: false, coerceTypes: false });
 addFormats(ajv);
 
 let sessionId: string;
-const openApiSpec = loadOpenApiSpec('../api-study_plan_2.yaml');
+const openApiSpec = loadOpenApiSpec('../openapi_doc.yaml');
 const requests = buildRequestsFromSpec(openApiSpec);
 
 async function validateResponse(responseBody: any, expectedSchema: any) {
